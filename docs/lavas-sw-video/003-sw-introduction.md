@@ -1,4 +1,4 @@
-# sw-get-stared
+# sw-introduction
 > Service Worker 初探.
 
 - https://www.bilibili.com/video/av35872705/
@@ -70,3 +70,9 @@ FALLBACK:
 ## 使用过程
 - 注册代码：sw-register.js
 - 工作代码：sw.js
+- 放在 load 里进行，防止抢占资源，而影响了实际的用户体验
+- 同一个域名下，可以注册多个不同的sw.js，只要管理不同的 scope就行了
+
+## 注意事项
+![](https://ws3.sinaimg.cn/large/006tNc79gy1g49v1zdfznj31040mgdke.jpg)
+

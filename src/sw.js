@@ -1,9 +1,7 @@
 // 用于标注创建的缓存，也可以根据它来建立版本规范
 const CACHE_NAME = 'app_cache_v1.0.1';
 // 列举要默认缓存的静态资源，一般用于离线使用
-const urlsToCache = ['/offline.html', '/app.js', '/'];
 
-// self 为当前 scope 内的上下文
 self.addEventListener('install', (event) => {
   // event.waitUtil 用于在安装成功之前执行一些预装逻辑
   // 但是建议只做一些轻量级和非常重要资源的缓存，减少安装失败的概率
@@ -11,12 +9,13 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     // 使用 cache API 打开指定的 cache 文件
     caches.open(CACHE_NAME).then((cache) => {
-      console.log(cache);
-      // 添加要缓存的资源列表
-      return cache.addAll(urlsToCache);
+      return cache.addAll([
+        '/',
+        'app.js',
+        'style.css'
+      ]);
     })
   );
-
   // self.skipWaiting();
 });
 
@@ -40,15 +39,5 @@ self.addEventListener('activate', (event) =>
 );
 
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((hit) => {
-      // 返回缓存中命中的文件
-      if (hit) {
-        console.log('hit!');
-        return hit;
-      } else {
-        console.log('no cache!');
-      }
-    })
-  );
+  console.log(event.request.url);
 });
