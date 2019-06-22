@@ -3,22 +3,25 @@ const CACHE_NAME = 'app_cache_v1.0.2';
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(['/', 'app.js', 'style.css']);
+      return cache.addAll(['/', 'app.js', 'style.css']).then(() => {
+        self.skipWaiting();
+      });
     })
   );
-  // self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) =>
   event.waitUntil(
     caches.keys().then((cacheList) =>
-      Promise.all(
+      Promise.all([
         cacheList.map((cacheName) => {
           if (cacheName !== CACHE_NAME) {
             caches.delete(cacheName);
           }
-        })
-      )
+        }),
+        // 控制权发生变化
+        self.clients.claim()
+      ])
     )
   )
 );
