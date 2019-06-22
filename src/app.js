@@ -1,3 +1,21 @@
+function NxSw() {
+  this.sw = navigator.serviceWorker;
+}
+
+NxSw.prototype.ready = function(inCallback) {
+  window.addEventListener('load', inCallback);
+};
+
+// check if support serviceWorker:
+NxSw.prototype.supportSw = function() {
+  return 'serviceWorker' in navigator;
+};
+
+// regiser:
+NxSw.prototype.register = function(inSwFile, inOptions) {
+  return this.sw.register(inSwFile,inOptions)
+};
+
 // registet sw:
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker
@@ -5,6 +23,5 @@ if ('serviceWorker' in navigator) {
     .then((registration) => console.log('ServiceWorker 注册成功！作用域为: ', registration.scope))
     .catch((err) => console.log('ServiceWorker 注册失败: ', err));
 }
-
 
 console.log('hello, sw11');

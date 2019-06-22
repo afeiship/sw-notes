@@ -2,10 +2,10 @@
 > Enjoy your notes!
 
 ::: tip
-Basic install steps.
+PWA.
 :::
 
-## Javascript
-  - [Home](/)
-  - [get-started](/javascript/001-get-started.md)
-  - [globby](/javascript/002-globby.md)
+## resources
+- https://lavas.baidu.com/
+- https://www.bilibili.com/video/av35872705
+- https://www.bilibili.com/video/av35880493
