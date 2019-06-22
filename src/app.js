@@ -7,3 +7,5 @@ window.addEventListener('load', function() {
       .catch((err) => console.log('ServiceWorker 注册失败: ', err));
   }
 });
+
+console.log('hello app!');

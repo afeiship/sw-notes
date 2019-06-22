@@ -1,19 +1,9 @@
-// 用于标注创建的缓存，也可以根据它来建立版本规范
-const CACHE_NAME = 'app_cache_v1.0.1';
-// 列举要默认缓存的静态资源，一般用于离线使用
+const CACHE_NAME = 'app_cache_v1.0.2';
 
 self.addEventListener('install', (event) => {
-  // event.waitUtil 用于在安装成功之前执行一些预装逻辑
-  // 但是建议只做一些轻量级和非常重要资源的缓存，减少安装失败的概率
-  // 安装成功后 ServiceWorker 状态会从 installing 变为 installed
   event.waitUntil(
-    // 使用 cache API 打开指定的 cache 文件
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll([
-        '/',
-        'app.js',
-        'style.css'
-      ]);
+      return cache.addAll(['/', 'app.js', 'style.css']);
     })
   );
   // self.skipWaiting();
@@ -21,23 +11,26 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('activate', (event) =>
   event.waitUntil(
-    Promise.all([
-      // 更新客户端
-      clients.claim(),
-      // 清理旧版本
-      caches.keys().then((cacheList) =>
-        Promise.all(
-          cacheList.map((cacheName) => {
-            if (cacheName !== CACHE_NAME) {
-              caches.delete(cacheName);
-            }
-          })
-        )
+    caches.keys().then((cacheList) =>
+      Promise.all(
+        cacheList.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            caches.delete(cacheName);
+          }
+        })
       )
-    ])
+    )
   )
 );
 
 self.addEventListener('fetch', (event) => {
-  console.log(event.request.url);
+  const req = event.request;
+  const url = new URL(event.request.url);
+  if (self.origin !== url.origin) return;
+  event.respondWith(
+    fetch(req).catch((e) => {
+      // 如果失败，就回退到缓存里
+      return caches.match(req);
+    })
+  );
 });
