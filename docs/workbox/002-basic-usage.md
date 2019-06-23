@@ -25,3 +25,4 @@ workbox.routing.registerRoute(
   workbox.strategies.staleWhileRevalidate()
 );
 ```
+
